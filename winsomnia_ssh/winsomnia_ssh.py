@@ -57,21 +57,23 @@ def check_prerequisite() -> Optional[str]:
         return "winsomnia is not in PATH. Did you install winsomnia-ssh successfully?"
     return None
 
-
 def daemonize():
-    sys.stdin.close()
-    sys.stderr.close()
-    sys.stdout.close()
-    sys.stdin = os.devnull
-    null = open(os.devnull, "r+")
-    sys.stdin = null
-    sys.stderr = null
-    sys.stdout = null
+    try:
+        sys.stdin.close()
+        sys.stderr.close()
+        sys.stdout.close()
+        sys.stdin = os.devnull
+        null = open(os.devnull, "r+")
+        sys.stdin = null
+        sys.stderr = null
+        sys.stdout = null
+    except Exception as e:
+        logging.critical(f"Error in daemonize: {e}")
+        sys.exit(1)
     if os.fork() == 0:
         return
     else:
         sys.exit(0)
-
 
 def run_winsomnia_noblock(timeout: int):
     subprocess.Popen(["winsomnia", str(timeout), "-q"],
