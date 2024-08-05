@@ -63,7 +63,7 @@ def daemonize():
     sys.stderr.close()
     sys.stdout.close()
     sys.stdin = os.devnull
-    null = open(os.devnull, "rw")
+    null = open(os.devnull, "r+")
     sys.stdin = null
     sys.stderr = null
     sys.stdout = null
